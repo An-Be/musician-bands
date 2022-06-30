@@ -1,5 +1,6 @@
 const {sequelize} = require('./db');
 const {Band, Musician} = require('./index')
+const {BandsData, MusicianData} = require('./seedData')
 
 describe('Band and Musician Models', () => {
     /**
@@ -18,7 +19,8 @@ describe('Band and Musician Models', () => {
          * Create a new instance of a band using the Band Model
          *  Check to see if the name passed into the object is in fact the correct on the new instance
          **/
-        expect('NO TEST').toBe('EXPECTED VALUE HERE');
+        const newBand = await Band.create(BandsData[0]);
+        expect(newBand.name).toBe(BandsData[0].name);
     })
 
     test('can create a Musician', async () => {
@@ -27,7 +29,8 @@ describe('Band and Musician Models', () => {
          * Create a new instance of a musician using the Musician Model
          *  Check to see if the name or intrument passed into the object is infact the correct on the new instance
          **/
-        expect('NO TEST').toBe('EXPECTED VALUE HERE');
+        const newMusician = await Musician.create(MusicianData[0]);
+        expect(newMusician.name).toBe(MusicianData[0].name);
     })
 
     /*
@@ -35,6 +38,7 @@ describe('Band and Musician Models', () => {
         - I've completed this test for you
         - I've left it here for you to see how to go about testing associations 
     */
+   
 
     test('Band can have many Musicians', async () => {
         await sequelize.sync({ force: true }); // recreate db

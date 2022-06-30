@@ -10,6 +10,9 @@ const {Musician} = require('./Musician')
  *  To complete this task, you'll have to use the functions .belongsTo() and .hasMany() 
  */
 
+Musician.belongsTo(Band);
+Band.hasMany(Musician);
+
 module.exports = {
     Band,
     Musician
