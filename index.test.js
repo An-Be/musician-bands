@@ -38,6 +38,7 @@ describe('Band and Musician Models', () => {
         - I've completed this test for you
         - I've left it here for you to see how to go about testing associations 
     */
+   
 
     test('Band can have many Musicians', async () => {
         await sequelize.sync({ force: true }); // recreate db
