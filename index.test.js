@@ -22,6 +22,27 @@ describe('Band and Musician Models', () => {
         const newBand = await Band.create(BandsData[0]);
         expect(newBand.name).toBe(BandsData[0].name);
     })
+    test('that count is autoincrementing', async () =>{
+        const band = await Band.create(BandsData[0]);
+        const band2 = await Band.create(BandsData[1]);
+
+        expect(band2.showCount).toBe(3);
+    })
+
+    test('can update Band name', async () => {
+        const newBand3 = await Band.create(BandsData[0]);
+        const updatedBand = await newBand3.update({
+            name: 'Peggy'
+        })
+        expect(updatedBand.name).toBe('Peggy')
+        
+    })
+
+    test('deleting a Band', async () => {
+        const newBand2 = await Band.create(BandsData[0]);
+        const deletedBand = await newBand2.destroy();
+        expect(Band.length).toBe(0);
+    })
 
     test('can create a Musician', async () => {
         // TODO - test creating a musician
@@ -32,6 +53,22 @@ describe('Band and Musician Models', () => {
         const newMusician = await Musician.create(MusicianData[0]);
         expect(newMusician.name).toBe(MusicianData[0].name);
     })
+
+    test('can update Band name', async () => {
+        const newMusician3 = await Musician.create(MusicianData[0]);
+        const updatedMusician = await newMusician3.update({
+            name: 'Sally'
+        })
+        expect(updatedMusician.name).toBe('Sally')
+        
+    })
+
+    test('deleting a Musician', async () => {
+        const newMusician2 = await Musician.create(MusicianData[0]);
+        const deletedMusician = await newMusician2.destroy();
+        expect(Musician.length).toBe(0);
+    })
+
 
     /*
      * Optional test to show associations:

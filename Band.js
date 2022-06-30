@@ -8,6 +8,11 @@ This will involve calling the sequelize.define() method, and passing in two argu
 
 */
 let Band = sequelize.define('band', {
+    showCount : {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+      },
     name: Sequelize.STRING,
     genre: Sequelize.STRING
 });
