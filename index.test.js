@@ -1,5 +1,5 @@
 const {sequelize} = require('./db');
-const {Band, Musician} = require('./index')
+const {Band, Musician, Song} = require('./index')
 const {BandsData, MusicianData} = require('./seedData')
 
 describe('Band and Musician Models', () => {
@@ -90,5 +90,22 @@ describe('Band and Musician Models', () => {
     
         expect(musicians.length).toBe(2); //we've added two musicians, so the length should be two
         expect(musicians[0] instanceof Musician).toBeTruthy; //checks that the value at index 0 of the list - a musician object, is in fact a musician object
+      });
+
+      //test for association between bands and songs
+
+      test('Band can have many songs', async () => {
+        await sequelize.sync({ force: true }); // recreate db
+        let BigBang = await Band.create({ name: 'BIGBANG', genre: 'KPOP' }); //create band
+        let Haru = await Song.create({ name: 'Haru Haru', instrument: 'Voice' }); //create musician
+        let MH = await Song.create({ name: 'My Heaven', instrument: 'Voice' }); //create musician
+    
+        await BigBang.addSong(Haru); //add song to band
+        await BigBang.addSong(MH); //add song to band
+    
+        const songs = await BigBang.getSongs(); //get all musicians in band - returns an array
+    
+        expect(songs.length).toBe(2); //we've added two musicians, so the length should be two
+        expect(songs[0] instanceof Song).toBeTruthy; //checks that the value at index 0 of the list - a musician object, is in fact a musician object
       });
 })
