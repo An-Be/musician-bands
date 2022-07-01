@@ -22,12 +22,6 @@ describe('Band and Musician Models', () => {
         const newBand = await Band.create(BandsData[0]);
         expect(newBand.name).toBe(BandsData[0].name);
     })
-    test('that count is autoincrementing', async () =>{
-        const band = await Band.create(BandsData[0]);
-        const band2 = await Band.create(BandsData[1]);
-
-        expect(band2.showCount).toBe(3);
-    })
 
     test('can update Band name', async () => {
         const newBand3 = await Band.create(BandsData[0]);
@@ -97,8 +91,8 @@ describe('Band and Musician Models', () => {
       test('Band can have many songs', async () => {
         await sequelize.sync({ force: true }); // recreate db
         let BigBang = await Band.create({ name: 'BIGBANG', genre: 'KPOP' }); //create band
-        let Haru = await Song.create({ name: 'Haru Haru', instrument: 'Voice' }); //create musician
-        let MH = await Song.create({ name: 'My Heaven', instrument: 'Voice' }); //create musician
+        let Haru = await Song.create({ name: 'Haru Haru', instrument: 'Voice' }); //create song
+        let MH = await Song.create({ name: 'My Heaven', instrument: 'Voice' }); //create song
     
         await BigBang.addSong(Haru); //add song to band
         await BigBang.addSong(MH); //add song to band
@@ -108,4 +102,26 @@ describe('Band and Musician Models', () => {
         expect(songs.length).toBe(2); //we've added two musicians, so the length should be two
         expect(songs[0] instanceof Song).toBeTruthy; //checks that the value at index 0 of the list - a musician object, is in fact a musician object
       });
+
+      test('eager loading data', async () => {
+        let Queen = await Band.create({ name: 'Queen', genre: 'Rock' }); //create band
+        let BH = await Song.create({ name: 'Bohemian Rhapsody', instrument: 'Drums' }); //create song
+        let somebody = await Song.create({ name: 'Somebody To Love', instrument: 'Voice' }); //create song
+        let FM = await Band.create({ name: 'Freddie Mercury', genre: 'Rock' }); //create musician
+        let BM = await Band.create({ name: 'Brian May', genre: 'Rock' }); //create musician
+
+        await Queen.addSong(BH); //add song to band
+        await Queen.addSong(somebody); //add song to band
+        await Queen.addMusician(FM); //add musician to band
+        await Queen.addMusician(BM); //add musician to band
+
+        const allBands = await Band.findAll({
+            include: [
+                { model: Musician, as: 'musicians'},
+                { model: Song, as: 'songs' }
+            ]
+        });
+
+        expect(allBands[1].name).toBe(Queen.name);
+    })
 })
